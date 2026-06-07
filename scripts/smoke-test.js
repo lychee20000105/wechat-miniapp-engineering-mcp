@@ -108,6 +108,20 @@ send(23, "tools/call", {
   name: "miniapp_understand_file_role",
   arguments: { projectPath: fixtureProjectPath, extraField: true }
 });
+send(24, "tools/call", {
+  name: "miniapp_dev_recovery_playbook",
+  arguments: { topic: "devtools-eisdir" }
+});
+send(25, "tools/call", {
+  name: "miniapp_cloudbase_release_preflight",
+  arguments: { action: "full-release", cloudFunctionName: "mcloud", envId: "demo-env", version: "1.2" }
+});
+send(26, "resources/read", {
+  uri: "miniapp://playbooks/dev-recovery"
+});
+send(27, "resources/read", {
+  uri: "miniapp://checklists/cloudbase-release"
+});
 
 setTimeout(() => {
   child.kill("SIGTERM");
@@ -137,7 +151,9 @@ setTimeout(() => {
       "miniapp_graph_stats",
       "miniapp_index_status",
       "miniapp_security_quick_scan",
-      "miniapp_showcase_roadmap"
+      "miniapp_showcase_roadmap",
+      "miniapp_dev_recovery_playbook",
+      "miniapp_cloudbase_release_preflight"
     ].every((name) => toolNames.includes(name)),
     inspectProjectReturnedText: Boolean(byId.get(3)?.result?.content?.[0]?.text?.includes("工程扫描")),
     logStatusReturnedText: Boolean(byId.get(6)?.result?.content?.[0]?.text?.includes("优化日志状态")),
@@ -158,14 +174,18 @@ setTimeout(() => {
     showcaseRoadmapResourceReturnedText: Boolean(byId.get(21)?.result?.contents?.[0]?.text?.includes("阶段 SOP")),
     invalidEnumRejected: byId.get(22)?.error?.code === -32602,
     missingRequiredRejected: byId.get(23)?.error?.code === -32602,
+    devRecoveryReturnedText: Boolean(byId.get(24)?.result?.content?.[0]?.text?.includes("EISDIR")),
+    releasePreflightReturnedText: Boolean(byId.get(25)?.result?.content?.[0]?.text?.includes("发布前预检")),
+    devRecoveryResourceReturnedText: Boolean(byId.get(26)?.result?.contents?.[0]?.text?.includes("故障恢复手册")),
+    releasePreflightResourceReturnedText: Boolean(byId.get(27)?.result?.contents?.[0]?.text?.includes("云函数预检")),
     resourceCount: byId.get(4)?.result?.resources?.length || 0,
     promptCount: byId.get(5)?.result?.prompts?.length || 0
   };
   console.log(JSON.stringify(summary, null, 2));
   if (
     !summary.initialize ||
-    summary.toolCount < 23 ||
-    summary.resourceCount < 18 ||
+    summary.toolCount < 25 ||
+    summary.resourceCount < 20 ||
     !summary.hasOptimizationLogTools ||
     !summary.hasUnderstandTools ||
     !summary.inspectProjectReturnedText ||
@@ -186,7 +206,11 @@ setTimeout(() => {
     !summary.showcaseRoadmapReturnedText ||
     !summary.showcaseRoadmapResourceReturnedText ||
     !summary.invalidEnumRejected ||
-    !summary.missingRequiredRejected
+    !summary.missingRequiredRejected ||
+    !summary.devRecoveryReturnedText ||
+    !summary.releasePreflightReturnedText ||
+    !summary.devRecoveryResourceReturnedText ||
+    !summary.releasePreflightResourceReturnedText
   ) {
     process.exitCode = 1;
   }

@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
 const SERVER_INFO = {
   name: "wechat-miniapp-engineering-mcp",
-  version: "0.5.2"
+  version: "0.6.0"
 };
 const LOG_DIR = path.join(ROOT, "logs");
 const LOG_JSONL = path.join(LOG_DIR, "mcp-optimization-log.jsonl");
@@ -667,6 +667,136 @@ function miniappShowcaseRoadmap(args = {}) {
   return sections.join("\n");
 }
 
+function miniappDevRecoveryPlaybook(args = {}) {
+  const topic = args.topic || "all";
+  const includeCaseStudy = args.includeCaseStudy !== false;
+  const playbook = understandingTemplates.devRecoveryPlaybook || {};
+  const incidents = Array.isArray(playbook.incidents) ? playbook.incidents : [];
+  const selected = topic === "all" ? incidents : incidents.filter((item) => item.id === topic);
+  const renderIncident = (item) => [
+    `### ${item.title || item.id || "未命名问题"}`,
+    item.trigger ? `- 触发信号：${item.trigger}` : "",
+    item.diagnosis ? `- 判断逻辑：${item.diagnosis}` : "",
+    "",
+    "处理步骤：",
+    toMarkdownList(item.actions || []),
+    "",
+    "预防固化：",
+    toMarkdownList(item.prevention || [])
+  ].filter(Boolean).join("\n");
+
+  return [
+    "# 微信小程序开发故障恢复手册",
+    "",
+    "## 使用边界",
+    "- 本工具只输出本地排查、验证和确认清单，不上传、不部署、不改云数据库、不发布 NPM/GitHub。",
+    "- 真实云函数部署、小程序上传、审核发布、NPM publish、git push 前都需要人工确认。",
+    "- 遇到会话/工具状态错乱时，不读取旧线程长历史，按摘要和现场文件继续。",
+    "",
+    includeCaseStudy ? "## 本次复盘沉淀" : "",
+    includeCaseStudy ? toMarkdownList(playbook.caseStudySummary || []) : "",
+    includeCaseStudy ? "" : "",
+    "## 问题模式与处理",
+    selected.length ? selected.map(renderIncident).join("\n\n") : "- 未找到匹配的问题模式。",
+    "",
+    "## 优化方案讨论结论",
+    toMarkdownList(playbook.optimizationDecisions || []),
+    "",
+    "## 推荐执行顺序",
+    toMarkdownList(playbook.recommendedOrder || []),
+    "",
+    "## 下次必须避免",
+    toMarkdownList(playbook.avoid || [])
+  ].filter(Boolean).join("\n");
+}
+
+function miniappCloudbaseReleasePreflight(args = {}) {
+  const action = args.action || "full-release";
+  const cloudFunctionName = args.cloudFunctionName || "mcloud";
+  const envId = args.envId || "<cloud-env-id>";
+  const version = args.version || "<read-from-devtools-or-platform>";
+  const useCleanStaging = args.useCleanStaging !== false;
+  const requireHumanConfirm = args.requireHumanConfirm !== false;
+  const includeCloud = ["cloud-function", "full-release"].includes(action);
+  const includeMiniapp = ["miniapp-upload", "audit-release", "full-release"].includes(action);
+  const includeNpmGithub = action === "npm-github";
+  const base = [
+    "# 微信小程序发布前预检",
+    "",
+    `- 动作范围：${action}`,
+    `- 云函数：${cloudFunctionName}`,
+    `- 云环境：${envId}`,
+    `- 版本号：${version}`,
+    `- clean staging：${useCleanStaging ? "建议启用" : "未启用"}`,
+    `- 人工确认门：${requireHumanConfirm ? "必须停下来确认" : "调用方已声明不需要"}`,
+    "",
+    "## 先核对现场",
+    "- [ ] 读取 `git status --short --branch`，确认哪些改动属于本轮，禁止回滚用户或旧线程改动。",
+    "- [ ] 核对微信开发者工具或微信公众平台里的真实版本号，不凭记忆建议版本。",
+    "- [ ] 如果用户截图或后台显示版本号，以截图/后台为准；本地旧日志只能作为参考。",
+    "- [ ] 所有外发动作前说明影响范围：云函数、体验版、审核发布、NPM 包、GitHub 仓库。"
+  ];
+
+  if (includeCloud) {
+    base.push(
+      "",
+      "## 云函数预检",
+      `- [ ] 确认要部署的是 \`${cloudFunctionName}\`，环境是 \`${envId}\`，不是测试目录或临时环境。`,
+      "- [ ] 静态检查 route -> controller 方法映射，新增 route 必须能找到控制器方法。",
+      "- [ ] 对云函数项目 JS 做 `node --check` 语法检查；本地 `wx-server-sdk` 缺失不等于线上不可用。",
+      "- [ ] 如果微信开发者工具 CLI 打包报 `EISDIR`，优先用 clean staging，排除 `node_modules` 后让远端 npm install。",
+      "- [ ] clean staging 目录只包含云函数源码、package.json/package-lock.json 和必要配置，不夹带 `.git`、cache、日志或临时目录。",
+      "- [ ] 云函数部署成功后，先在开发者工具里复测调用该 route 的页面。"
+    );
+  }
+
+  if (includeMiniapp) {
+    base.push(
+      "",
+      "## 小程序前端预检",
+      "- [ ] `app.json` 中每个页面都存在 `.js/.json/.wxml/.wxss` 四件套。",
+      "- [ ] 新增页面已注册到 `app.json`，入口菜单、跳转路径和页面标题一致。",
+      "- [ ] 开发者工具普通编译通过；警告可记录但不能忽略阻断错误。",
+      "- [ ] 本地测试覆盖关键入口：订单编辑、业绩、我的工资、管理中心、管理收款、工资结算、订单审核、员工管理。",
+      "- [ ] 点击上传只是生成开发版本；线上用户更新还需要微信公众平台提交审核并发布。"
+    );
+  }
+
+  if (action === "audit-release") {
+    base.push(
+      "",
+      "## 审核发布预检",
+      "- [ ] 在微信公众平台 `管理 -> 版本管理` 找到刚上传的开发版本。",
+      "- [ ] 可先设为体验版，用测试账号/测试数据走完整流程。",
+      "- [ ] 审核备注写清入口、功能用途和权限边界。",
+      "- [ ] 审核通过后再点发布；发布前确认是否全量发布或灰度发布。"
+    );
+  }
+
+  if (includeNpmGithub) {
+    base.push(
+      "",
+      "## NPM 与 GitHub 发布预检",
+      "- [ ] 确认 package.json 版本号已递增，server 内部版本号同步。",
+      "- [ ] `npm run smoke:test`、`node --check`、`npm pack --dry-run` 通过。",
+      "- [ ] 敏感扫描确认公开文件不含密钥、token、手机号、真实云存储 fileID、本机私密路径或客户资料。",
+      "- [ ] `git diff --stat` 和 `git status` 已复核，只提交本 MCP 项目相关文件。",
+      "- [ ] `npm publish` 和 `git push` 都是外发动作，执行前必须让维护者确认影响范围。"
+    );
+  }
+
+  base.push(
+    "",
+    "## 完成后复盘",
+    "- [ ] 追加 MCP 内部优化日志。",
+    "- [ ] 运行 `npm run changelog:sync`，同步 README 最近更新、公开 CHANGELOG 和创建说明书。",
+    "- [ ] 如果发布到外部，记录 npm 包版本、Git commit、Git tag 或远程分支。",
+    "- [ ] 不把原始内部日志、cache、真实项目路径和客户资料同步到公开仓库。"
+  );
+
+  return base.join("\n");
+}
+
 function docsLookup(args = {}) {
   const topic = String(args.topic || "").toLowerCase();
   const all = [...docs.official, ...docs.github];
@@ -752,13 +882,14 @@ function localMcpOptimizationAdvice(args = {}) {
     "- 已加入本地工作画像，包含沟通、交付、安全、知识库和编码习惯。",
     "- 已加入技能路由表，可判断小程序工程中应优先使用哪些技能。",
     "- 工程蓝图默认加入“本地工作方式”章节，避免只给技术模板。",
+    "- 已加入 `miniapp_dev_recovery_playbook`，把会话错乱、页面缺失、云函数路由/部署、DevTools EISDIR 和版本发布问题固化成恢复手册。",
+    "- 已加入 `miniapp_cloudbase_release_preflight`，用于云函数、小程序上传审核、NPM/GitHub 外发前的确认清单。",
     "- MCP 仍保持本地只读和不保存密钥的安全边界。",
     "",
     "## 针对小程序工程的下一步增强",
     "- 增加 `miniapp_generate_implementation_plan`：输入功能名，输出 route/controller/service/model/page 文件施工图。",
     "- 增加 `miniapp_privacy_audit`：检查客户私密相册、云存储、手机号/订单码、访问日志和撤销机制。",
     "- 增加 `miniapp_skill_recommender`：根据任务推荐是否使用 silent-search、security、marketingskills、ffmpeg、playwright。",
-    "- 增加 `miniapp_cloudbase_preflight`：真实 CloudBase 操作前列出影响范围、环境、集合、云函数和确认项。",
     "- 增加 `miniapp_rule_snapshot`：定期扫描 AGENTS/CLAUDE/知识库协议，发现规则漂移。",
     "",
     "## 当前不建议做的优化",
@@ -2369,6 +2500,36 @@ const tools = [
     handler: workBreakdown
   },
   {
+    name: "miniapp_dev_recovery_playbook",
+    description: "把微信小程序开发中的常见故障复盘成恢复手册，覆盖会话错乱、页面四件套、云函数路由、DevTools EISDIR、版本发布和外发确认。",
+    inputSchema: {
+      type: "object",
+      properties: {
+        topic: { type: "string", enum: ["all", "session-state", "missing-page-files", "cloud-route-deploy", "devtools-eisdir", "version-release", "delegation"], description: "只看某类问题，默认 all。" },
+        includeCaseStudy: { type: "boolean", description: "是否包含本次复盘摘要，默认 true。" }
+      },
+      additionalProperties: false
+    },
+    handler: miniappDevRecoveryPlaybook
+  },
+  {
+    name: "miniapp_cloudbase_release_preflight",
+    description: "生成云函数部署、小程序上传/审核发布、NPM/GitHub 同步前的确认清单，避免环境、版本、打包和外发范围出错。",
+    inputSchema: {
+      type: "object",
+      properties: {
+        action: { type: "string", enum: ["cloud-function", "miniapp-upload", "audit-release", "full-release", "npm-github"], description: "预检动作范围，默认 full-release。" },
+        cloudFunctionName: { type: "string", description: "云函数名，默认 mcloud。" },
+        envId: { type: "string", description: "云环境 ID。" },
+        version: { type: "string", description: "准备上传/发布的版本号；必须来自开发者工具或公众平台日志。" },
+        useCleanStaging: { type: "boolean", description: "是否使用 clean staging 避免打包 EISDIR，默认 true。" },
+        requireHumanConfirm: { type: "boolean", description: "是否强制人工确认门，默认 true。" }
+      },
+      additionalProperties: false
+    },
+    handler: miniappCloudbaseReleasePreflight
+  },
+  {
     name: "miniapp_launch_checklist",
     description: "生成微信小程序上线前检查清单，包含云开发、隐私、审核、客户私密相册交付。",
     inputSchema: {
@@ -2722,6 +2883,18 @@ const resources = [
     mimeType: "text/markdown"
   },
   {
+    uri: "miniapp://playbooks/dev-recovery",
+    name: "小程序开发故障恢复手册",
+    description: "会话错乱、页面缺失、云函数路由/部署、DevTools 打包 EISDIR、版本发布和外发确认的恢复手册。",
+    mimeType: "text/markdown"
+  },
+  {
+    uri: "miniapp://checklists/cloudbase-release",
+    name: "云函数与小程序发布预检",
+    description: "云函数部署、小程序上传/审核发布、NPM/GitHub 同步前的确认清单。",
+    mimeType: "text/markdown"
+  },
+  {
     uri: "miniapp://cloudbase/mcp-guide",
     name: "CloudBase MCP 使用说明",
     description: "CloudBase MCP 配置说明、安全边界和分工。",
@@ -2812,6 +2985,8 @@ function readResource(uri) {
   if (uri === "miniapp://project/current") return inspectProject({ includeReadme: false });
   if (uri === "miniapp://checklists/launch") return launchChecklist({});
   if (uri === "miniapp://roadmap/showcase") return miniappShowcaseRoadmap({});
+  if (uri === "miniapp://playbooks/dev-recovery") return miniappDevRecoveryPlaybook({});
+  if (uri === "miniapp://checklists/cloudbase-release") return miniappCloudbaseReleasePreflight({});
   if (uri === "miniapp://cloudbase/mcp-guide") return cloudbaseMcpGuide();
   if (uri === "miniapp://user/profile") return localUserProfile({});
   if (uri === "miniapp://user/skill-routing") return localSkillRouting({});

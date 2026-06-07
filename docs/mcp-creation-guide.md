@@ -2,7 +2,7 @@
 
 这是一份给小白看的创建说明书。它不是冷冰冰的流水账，而是把这个 MCP 从 0 到现在怎么长出来，拆成一站一站的小积木。
 
-当前公开版：v0.5.2
+当前公开版：v0.6.0
 
 ## 先说人话：这个 MCP 是干什么的
 
@@ -196,6 +196,29 @@
 - node --check src/server.js 通过。
 - node --check scripts/smoke-test.js 通过。
 - node --check scripts/sync-public-changelog.js 通过。
+
+## 第 9 站：2026-06-07，v0.6.0
+
+这一站做的事：完成 v0.6.0 开发复盘沉淀：新增小程序故障恢复手册和云函数/小程序/NPM/GitHub 发布前预检工具。
+
+### 小白怎么理解
+- 版本从 0.5.2 升级到 0.6.0，因为新增两个用户可见工具和两个资源。
+- 新增 miniapp_dev_recovery_playbook，把 systemError 恢复、app.json 页面四件套、云函数路由/部署、DevTools EISDIR、版本发布、代理协作边界固化成 playbook。
+- 新增 miniapp_cloudbase_release_preflight，把云函数部署、小程序上传/审核发布、NPM/GitHub 同步前检查统一到人工确认门。
+- 将本次真实开发中的问题模式写入 data/understanding-templates.json，避免只硬编码在 server 函数里。
+
+### 实际动了哪些地方
+- src/server.js：版本升到 0.6.0；新增 miniappDevRecoveryPlaybook、miniappCloudbaseReleasePreflight；注册两个工具和两个资源；更新优化建议。
+- data/understanding-templates.json：新增 devRecoveryPlaybook 模板，记录本次开发问题模式、处理步骤、预防策略和避免项。
+- scripts/smoke-test.js：新增两个工具和两个资源的冒烟测试断言，预期 toolCount 25、resourceCount 20。
+- README.md：更新版本、核心能力、工具表、资源列表和 smoke test 示例数量。
+- package.json：版本升到 0.6.0。
+
+### 怎么确认没有跑偏
+- node --check src/server.js 通过。
+- node --check scripts/smoke-test.js 通过。
+- data/understanding-templates.json 可正常 JSON.parse。
+- npm run smoke:test 通过：toolCount 25、resourceCount 20、promptCount 3。
 
 ## 以后怎么更新这份说明书
 

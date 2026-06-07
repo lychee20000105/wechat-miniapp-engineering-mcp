@@ -4,6 +4,38 @@
 
 同步时会脱敏本机路径、手机号、密钥形态、真实云存储路径和本地业务知识库描述；原始内部日志默认不提交到 GitHub。
 
+## 2026-06-07 - v0.6.0
+
+- 状态：success
+- 类型：dev-recovery-release-playbook-upgrade
+- 摘要：完成 v0.6.0 开发复盘沉淀：新增小程序故障恢复手册和云函数/小程序/NPM/GitHub 发布前预检工具。
+
+### 主要变更
+- 版本从 0.5.2 升级到 0.6.0，因为新增两个用户可见工具和两个资源。
+- 新增 miniapp_dev_recovery_playbook，把 systemError 恢复、app.json 页面四件套、云函数路由/部署、DevTools EISDIR、版本发布、代理协作边界固化成 playbook。
+- 新增 miniapp_cloudbase_release_preflight，把云函数部署、小程序上传/审核发布、NPM/GitHub 同步前检查统一到人工确认门。
+- 将本次真实开发中的问题模式写入 data/understanding-templates.json，避免只硬编码在 server 函数里。
+- README、smoke test、资源列表和优化建议同步更新，确保新能力可见且可验证。
+- NPM publish 和 git push 属于外发动作，本轮只完成本地准备，执行前仍需用户最终确认。
+
+### 文件与验证
+- src/server.js：版本升到 0.6.0；新增 miniappDevRecoveryPlaybook、miniappCloudbaseReleasePreflight；注册两个工具和两个资源；更新优化建议。
+- data/understanding-templates.json：新增 devRecoveryPlaybook 模板，记录本次开发问题模式、处理步骤、预防策略和避免项。
+- scripts/smoke-test.js：新增两个工具和两个资源的冒烟测试断言，预期 toolCount 25、resourceCount 20。
+- README.md：更新版本、核心能力、工具表、资源列表和 smoke test 示例数量。
+- package.json：版本升到 0.6.0。
+- node --check src/server.js 通过。
+- node --check scripts/smoke-test.js 通过。
+- data/understanding-templates.json 可正常 JSON.parse。
+- npm run smoke:test 通过：toolCount 25、resourceCount 20、promptCount 3。
+- 新增 miniapp_dev_recovery_playbook 返回 DevTools EISDIR 恢复内容。
+
+### 安全边界
+- 本轮只修改本地 MCP 项目文件，未修改真实小程序项目、云数据库或云函数线上环境。
+- 本轮未执行 npm publish、git push、部署、上传、审核发布或外部账号权限修改。
+- 公开同步前仍需脱敏检查，原始内部日志继续默认不提交 GitHub。
+- 发布 NPM 和 GitHub 前必须向用户说明包名、版本、远程仓库、提交范围和影响后再执行。
+
 ## 2026-06-07 - v0.5.2
 
 - 状态：success

@@ -6,7 +6,7 @@
 
 ## 项目状态
 
-- 当前版本：`0.5.2`
+- 当前版本：`0.6.0`
 - 运行方式：本地 stdio MCP server
 - 目标用户：中国微信小程序开发者、AI IDE 用户、刚开始做小程序的产品/运营/个体商家
 - 默认示例：包内 synthetic 微信小程序 fixture，不包含真实客户资料、真实 AppID、真实云存储 fileID 或密钥
@@ -18,6 +18,8 @@
 - 生成微信小程序工程蓝图：产品定位、页面、数据集合、云函数、UI、测试和上线。
 - 输出“客户成片展示小程序”小白路线图：业务定位、MVP 边界、阶段 SOP、页面、数据、CloudBase、隐私和上线清单。
 - 把功能拆成需求、UI、前端、后端、测试、上线任务。
+- 固化小程序开发故障恢复手册，覆盖会话恢复、页面四件套、云函数路由/部署、DevTools EISDIR、版本发布和外发确认。
+- 生成云函数、小程序上传/审核、NPM/GitHub 同步前的发布预检清单。
 - 生成小程序上线检查清单，重点覆盖隐私、云存储、数据库规则和审核材料。
 - 生成轻量项目地图、文件角色解释、功能影响分析、相关上下文和 Mermaid 依赖图。
 - 做小程序专项安全快扫，只输出路径、行号、规则和修复方向，不输出原始敏感匹配文本。
@@ -68,6 +70,8 @@ npm run start
 | `miniapp_generate_blueprint` | 生成小程序产品到工程的完整蓝图 |
 | `miniapp_showcase_roadmap` | 生成客户成片展示小程序的小白路线图 |
 | `miniapp_work_breakdown` | 把功能拆成需求、UI、前端、后端、测试、上线任务 |
+| `miniapp_dev_recovery_playbook` | 生成小程序开发故障恢复手册 |
+| `miniapp_cloudbase_release_preflight` | 生成云函数/小程序/NPM/GitHub 发布前预检清单 |
 | `miniapp_launch_checklist` | 生成上线前检查清单 |
 | `miniapp_project_map` | 输出页面、云函数、集合、组件和依赖边 |
 | `miniapp_understand_file_role` | 解释某个文件的角色、上下游和下一步 |
@@ -88,6 +92,8 @@ npm run start
 - `miniapp://project/current`
 - `miniapp://checklists/launch`
 - `miniapp://roadmap/showcase`
+- `miniapp://playbooks/dev-recovery`
+- `miniapp://checklists/cloudbase-release`
 - `miniapp://cloudbase/mcp-guide`
 - `miniapp://audit/optimization-log`
 - `miniapp://audit/optimization-log/latest`
@@ -115,8 +121,8 @@ npm run smoke:test
 ```json
 {
   "initialize": true,
-  "toolCount": 23,
-  "resourceCount": 18,
+  "toolCount": 25,
+  "resourceCount": 20,
   "promptCount": 3,
   "showcaseRoadmapReturnedText": true,
   "invalidEnumRejected": true,
@@ -163,11 +169,11 @@ npm run changelog:sync
 <!-- changelog-summary:start -->
 ### 最近更新
 
+- 2026-06-07 `v0.6.0`：完成 v0.6.0 开发复盘沉淀：新增小程序故障恢复手册和云函数/小程序/NPM/GitHub 发布前预检工具。
 - 2026-06-07 `v0.5.2`：完成 v0.5.2 文档同步升级：新增小白友好版 MCP 详细创建说明书，并纳入 changelog:sync 自动更新流程。
 - 2026-06-07 `v0.5.1`：完成 v0.5.1 开源准备：整理中文 GitHub README、MIT 许可证、公开脱敏 CHANGELOG 同步机制、通用默认配置和发布前安全忽略规则。
 - 2026-06-07 `v0.5.0`：完成 v0.5.0 优化：新增客户成片展示小程序路线图工具与资源，并加入轻量参数校验和 JSON-RPC 错误码分类。
 - 2026-06-07 `v0.4.1`：完成 v0.4.1 小步可验证优化：强化 realpath 路径安全、包内 synthetic fixture 验证、WXML/WXSS/JSON 组件关系识别、上线安全快扫规则和日志 outcome 字段。
-- 2026-06-07 `v0.4.0`：完成 v0.4.0 融合升级：把 CodeGraph 评估中最适合微信小程序工程 MCP 的轻量图谱、上下文、依赖图、增量索引和安全快扫能力嵌入本地 MCP。
 <!-- changelog-summary:end -->
 
 完整公开更新日志见 [CHANGELOG.md](CHANGELOG.md)。
