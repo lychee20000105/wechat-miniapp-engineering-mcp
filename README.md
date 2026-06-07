@@ -12,6 +12,13 @@
 - 默认示例：包内 synthetic 微信小程序 fixture，不包含真实客户资料、真实 AppID、真实云存储 fileID 或密钥
 - 安全边界：默认不联网、不部署、不写真实 CloudBase/Tencent 环境、不保存密钥
 
+## Codex Skill 版本
+
+如果你主要在 Codex 里使用微信小程序工程经验，推荐使用新版 Skill 仓库：
+[wechat-miniapp-engineering-skill](https://github.com/lychee20000105/wechat-miniapp-engineering-skill)。
+
+Skill 版本把本 MCP 的工程经验、工作流、检查清单和离线演示工具打包成 Codex 可直接安装的能力包；本仓库仍保留原 stdio MCP server，适合需要接入 MCP 客户端的场景。
+
 ## 核心能力
 
 - 扫描本地微信原生/云开发小程序工程，解释页面、tabBar、云函数、业务模块和下一步建议。
