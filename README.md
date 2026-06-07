@@ -28,7 +28,7 @@
 要求 Node.js `>=18`。
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/lychee20000105/wechat-miniapp-engineering-mcp.git
 cd wechat-miniapp-engineering-mcp
 npm run smoke:test
 ```
