@@ -1,0 +1,11 @@
+{
+  "public_showcase_demo": {
+    "read": true,
+    "write": false,
+    "note": "demo 云存储 public read true for public showcase only"
+  },
+  "private_album_demo": {
+    "read": "cloud function signed access only",
+    "write": false
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "Showcase",
+  "usingComponents": {
+    "album-card": "/components/album-card/index"
+  }
+}

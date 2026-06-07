@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "wechat-miniapp-engineering": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/wechat-miniapp-engineering-mcp/src/server.js"
+      ]
+    },
+    "cloudbase": {
+      "command": "npx",
+      "args": [
+        "@cloudbase/cloudbase-mcp@latest"
+      ]
+    }
+  }
+}

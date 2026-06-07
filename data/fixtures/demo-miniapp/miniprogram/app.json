@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/album/detail"
+  ],
+  "usingComponents": {
+    "status-tag": "/components/status-tag/index"
+  },
+  "window": {
+    "navigationBarTitleText": "Demo Showcase"
+  }
+}

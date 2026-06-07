@@ -1,0 +1,4 @@
+<view class="album-card" bindtap="handleTap">
+  <status-tag text="private" />
+  <text>{{title}}</text>
+</view>

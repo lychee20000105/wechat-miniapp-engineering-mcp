@@ -1,0 +1,5 @@
+@import "./styles/design-vars.wxss";
+
+page {
+  background: #f7f8fa;
+}

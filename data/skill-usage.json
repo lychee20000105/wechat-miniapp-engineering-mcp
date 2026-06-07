@@ -1,0 +1,59 @@
+{
+  "profileVersion": "2026-06-07",
+  "installedSkillGroups": [
+    {
+      "group": "检索与资料",
+      "skills": ["silent-search", "find-skills", "playwright"],
+      "howToUse": "需要搜索 GitHub、官方文档、批量资料或网页验证时使用。普通小程序工程建议优先官方文档和本地知识库。"
+    },
+    {
+      "group": "本地沉淀与发布",
+      "skills": ["private-self-evolution", "publish-github-open-source", "skill-creator", "skill-installer"],
+      "howToUse": "涉及记住偏好、更新规则、发布开源项目、创建或安装技能时使用。外发和 GitHub 发布前必须确认。"
+    },
+    {
+      "group": "文档与交付物",
+      "skills": ["html-anything", "html-document-typesetting", "pdf", "pptx-generator", "codex-ppt"],
+      "howToUse": "需要正式报告、HTML 方案、PDF、PPT/PPTX、可交付文档时使用。"
+    },
+    {
+      "group": "营销与内容",
+      "skills": ["marketingskills", "blogger-distiller", "douyin-cold-start-report"],
+      "howToUse": "客户成片展示小程序涉及获客、套餐、成交话术、小红书/抖音内容时使用。"
+    },
+    {
+      "group": "视频与视觉",
+      "skills": ["ffmpeg", "hyperframes", "remotion-best-practices", "screenshot"],
+      "howToUse": "涉及成片压缩、视频预览、动画宣传素材、桌面截图时使用。"
+    },
+    {
+      "group": "安全与验证",
+      "skills": ["security-best-practices", "tokf-run", "tokf-discover"],
+      "howToUse": "涉及客户隐私、云存储权限、命令输出过长、测试输出压缩时使用。"
+    }
+  ],
+  "claudePluginHints": [
+    "code-review: 适合做代码审查和风险排查",
+    "feature-dev: 适合把一个功能从需求推进到实现任务",
+    "frontend-design: 适合客户前台 UI 体验设计",
+    "mcp-server-dev: 适合继续增强本地 MCP",
+    "security-guidance: 适合客户隐私、权限和云存储安全",
+    "commit-commands: 适合代码提交和清理流程",
+    "code-modernization: 适合旧项目渐进式现代化评估"
+  ],
+  "recommendedForMiniProgram": [
+    "private-self-evolution",
+    "silent-search",
+    "playwright",
+    "security-best-practices",
+    "marketingskills",
+    "html-anything",
+    "ffmpeg",
+    "tokf-run"
+  ],
+  "avoidByDefaultForMiniProgram": [
+    "不要默认引入 Taro/uni-app/React/Vue 跨端框架",
+    "不要默认用大型后端管理系统替换现有云开发架构",
+    "不要把 PPT、视频、营销技能当成工程主线，除非目标是交付展示物或获客内容"
+  ]
+}

@@ -1,0 +1,4 @@
+<view class="page">
+  <status-tag text="demo" />
+  <album-card title="Private Album Demo" bindopen="handleOpenAlbum" />
+</view>

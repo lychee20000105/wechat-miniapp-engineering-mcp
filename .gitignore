@@ -1,0 +1,32 @@
+node_modules/
+.DS_Store
+
+# Local secrets and private config
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+credentials*
+*secret*
+*password*
+*token*
+project.private.config.json
+auth.json
+history.jsonl
+!data/fixtures/demo-miniapp/miniprogram/styles/tokens.wxss
+
+# Local/generated MCP state
+logs/mcp-optimization-log.jsonl
+logs/mcp-optimization-log.md
+cache/*.json
+
+# Private local adaptation artifacts
+data/user-profile.json
+outputs/*.md
+
+# Build and coverage outputs
+dist/
+build/
+coverage/
+*.log

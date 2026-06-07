@@ -1,0 +1,9 @@
+{
+  "appid": "touristappid",
+  "projectname": "demo-showcase-miniapp",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "setting": {
+    "urlCheck": true
+  }
+}

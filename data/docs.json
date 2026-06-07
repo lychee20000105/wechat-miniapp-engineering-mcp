@@ -1,0 +1,61 @@
+{
+  "official": [
+    {
+      "title": "微信小程序框架",
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/",
+      "topics": ["framework", "basic", "frontend", "pages"]
+    },
+    {
+      "title": "小程序全局配置 app.json",
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/framework/config.html",
+      "topics": ["config", "app.json", "pages", "tabbar"]
+    },
+    {
+      "title": "微信云开发快速开始",
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloud/basis/getting-started.html",
+      "topics": ["cloudbase", "database", "functions", "storage", "backend"]
+    },
+    {
+      "title": "小程序 CI 文档",
+      "url": "https://developers.weixin.qq.com/miniprogram/dev/devtools/ci.html",
+      "topics": ["ci", "deploy", "upload", "preview", "release"]
+    },
+    {
+      "title": "小程序设计指南",
+      "url": "https://developers.weixin.qq.com/miniprogram/design/",
+      "topics": ["ui", "design", "wechat"]
+    }
+  ],
+  "github": [
+    {
+      "title": "微信官方小程序示例",
+      "url": "https://github.com/wechat-miniprogram/miniprogram-demo",
+      "topics": ["demo", "official", "frontend", "cloud"]
+    },
+    {
+      "title": "TDesign 小程序组件库",
+      "url": "https://github.com/Tencent/tdesign-miniprogram",
+      "topics": ["ui", "component", "design-system"]
+    },
+    {
+      "title": "CloudBase MCP / AI ToolKit",
+      "url": "https://github.com/TencentCloudBase/CloudBase-AI-ToolKit",
+      "topics": ["mcp", "cloudbase", "ai", "deploy"]
+    },
+    {
+      "title": "CloudBase CLI",
+      "url": "https://github.com/TencentCloudBase/cloudbase-cli",
+      "topics": ["cli", "cloudbase", "deploy", "ops"]
+    },
+    {
+      "title": "CloudBase Framework",
+      "url": "https://github.com/Tencent/cloudbase-framework",
+      "topics": ["framework", "cloudbase", "deploy"]
+    },
+    {
+      "title": "小程序开发资源汇总",
+      "url": "https://github.com/justjavac/awesome-wechat-weapp",
+      "topics": ["index", "awesome", "resources"]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "wechat-miniapp-engineering-mcp",
+  "version": "0.5.1",
+  "private": false,
+  "type": "module",
+  "description": "中文优先的本地微信小程序工程顾问 MCP，帮助小白从想法拆到上线。",
+  "bin": {
+    "wechat-miniapp-engineering-mcp": "./src/server.js"
+  },
+  "scripts": {
+    "start": "node ./src/server.js",
+    "smoke:test": "node ./scripts/smoke-test.js",
+    "changelog:sync": "node ./scripts/sync-public-changelog.js"
+  },
+  "keywords": [
+    "mcp",
+    "wechat-mini-program",
+    "miniprogram",
+    "cloudbase",
+    "china",
+    "ai-coding",
+    "engineering-planning"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

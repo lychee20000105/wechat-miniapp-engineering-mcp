@@ -1,0 +1,10 @@
+{
+  "showcase_case_demo": {
+    "read": true,
+    "write": "admin only"
+  },
+  "client_album_demo": {
+    "read": "auth.openid == resource.ownerOpenid",
+    "write": false
+  }
+}
