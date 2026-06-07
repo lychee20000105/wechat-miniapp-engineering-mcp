@@ -6,7 +6,7 @@
 
 ## 项目状态
 
-- 当前版本：`0.5.1`
+- 当前版本：`0.5.2`
 - 运行方式：本地 stdio MCP server
 - 目标用户：中国微信小程序开发者、AI IDE 用户、刚开始做小程序的产品/运营/个体商家
 - 默认示例：包内 synthetic 微信小程序 fixture，不包含真实客户资料、真实 AppID、真实云存储 fileID 或密钥
@@ -21,7 +21,7 @@
 - 生成小程序上线检查清单，重点覆盖隐私、云存储、数据库规则和审核材料。
 - 生成轻量项目地图、文件角色解释、功能影响分析、相关上下文和 Mermaid 依赖图。
 - 做小程序专项安全快扫，只输出路径、行号、规则和修复方向，不输出原始敏感匹配文本。
-- 维护 MCP 优化日志，并可同步生成脱敏公开版 `CHANGELOG.md`。
+- 维护 MCP 优化日志，并可同步生成脱敏公开版 `CHANGELOG.md` 和小白友好版创建说明书。
 
 ## 快速开始
 
@@ -147,7 +147,7 @@ logs/mcp-optimization-log.jsonl
 logs/mcp-optimization-log.md
 ```
 
-这两份原始日志默认不提交到 GitHub。公开项目说明使用脱敏后的 `CHANGELOG.md`，并同步 README 的最近更新摘要：
+这两份原始日志默认不提交到 GitHub。公开项目说明使用脱敏后的 `CHANGELOG.md`，同时同步 README 最近更新摘要和 [MCP 详细创建说明书](docs/mcp-creation-guide.md)：
 
 ```bash
 npm run changelog:sync
@@ -158,16 +158,16 @@ npm run changelog:sync
 - 从内部 JSONL 日志提取版本、摘要、变更文件、验证结果和安全边界。
 - 自动脱敏本机路径、手机号、密钥形态、真实云存储路径和本地知识库描述。
 - 不同步隐藏推理、客户原文、密钥、token、订单号、手机号或真实 fileID。
-- 后续每次追加内部优化日志后，先运行 `npm run changelog:sync`，再提交 README 和 `CHANGELOG.md`。
+- 后续每次追加内部优化日志后，先运行 `npm run changelog:sync`，再提交 README、`CHANGELOG.md` 和 `docs/mcp-creation-guide.md`。
 
 <!-- changelog-summary:start -->
 ### 最近更新
 
+- 2026-06-07 `v0.5.2`：完成 v0.5.2 文档同步升级：新增小白友好版 MCP 详细创建说明书，并纳入 changelog:sync 自动更新流程。
 - 2026-06-07 `v0.5.1`：完成 v0.5.1 开源准备：整理中文 GitHub README、MIT 许可证、公开脱敏 CHANGELOG 同步机制、通用默认配置和发布前安全忽略规则。
 - 2026-06-07 `v0.5.0`：完成 v0.5.0 优化：新增客户成片展示小程序路线图工具与资源，并加入轻量参数校验和 JSON-RPC 错误码分类。
 - 2026-06-07 `v0.4.1`：完成 v0.4.1 小步可验证优化：强化 realpath 路径安全、包内 synthetic fixture 验证、WXML/WXSS/JSON 组件关系识别、上线安全快扫规则和日志 outcome 字段。
 - 2026-06-07 `v0.4.0`：完成 v0.4.0 融合升级：把 CodeGraph 评估中最适合微信小程序工程 MCP 的轻量图谱、上下文、依赖图、增量索引和安全快扫能力嵌入本地 MCP。
-- 2026-06-07 `v0.3.0`：完成 GitHub CodeGraph 项目阅读与 MCP 融合可行性评估，结论是吸收轻量代码图谱/上下文/影响分析方法，不直接捆绑 Rust 二进制和全量 hooks。
 <!-- changelog-summary:end -->
 
 完整公开更新日志见 [CHANGELOG.md](CHANGELOG.md)。

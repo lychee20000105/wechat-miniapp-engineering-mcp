@@ -9,6 +9,7 @@ const ROOT = path.resolve(__dirname, "..");
 const LOG_JSONL = path.join(ROOT, "logs", "mcp-optimization-log.jsonl");
 const CHANGELOG = path.join(ROOT, "CHANGELOG.md");
 const README = path.join(ROOT, "README.md");
+const CREATION_GUIDE = path.join(ROOT, "docs", "mcp-creation-guide.md");
 const START_MARKER = "<!-- changelog-summary:start -->";
 const END_MARKER = "<!-- changelog-summary:end -->";
 
@@ -21,6 +22,7 @@ function readText(filePath) {
 }
 
 function writeText(filePath, text) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, text.endsWith("\n") ? text : `${text}\n`, "utf8");
 }
 
@@ -39,6 +41,9 @@ function sanitize(value) {
     .replace(/云屿/g, "本地业务")
     .replace(/小李/g, "使用者")
     .replace(/\blychee\b/gi, "维护者")
+    .replace(/维护者\s+与/g, "维护者与")
+    .replace(/方便\s+维护者/g, "方便维护者")
+    .replace(/仍需\s+维护者/g, "仍需维护者")
     .trim();
 }
 
@@ -139,13 +144,94 @@ function updateReadme(entries) {
   writeText(README, `${before}${replacement}${after}`);
 }
 
+function compactList(items, limit = 5) {
+  const values = Array.isArray(items) ? items : [];
+  if (!values.length) return "- 这一轮主要是整理和验证，没有额外公开细节。";
+  return values.slice(0, limit).map((item) => `- ${sanitize(item)}`).join("\n");
+}
+
+function renderGuideChapter(entry, index) {
+  const version = sanitize(entry.mcpVersion || "unknown");
+  const date = dateOnly(entry.timestamp);
+  const title = sanitize(entry.summary || "更新记录");
+  const decisions = entry.codexDecisions || [];
+  const files = entry.filesChanged || [];
+  const verification = entry.verification || [];
+  return [
+    `## 第 ${index + 1} 站：${date}，v${version}`,
+    "",
+    `这一站做的事：${title}`,
+    "",
+    "### 小白怎么理解",
+    compactList(decisions, 4),
+    "",
+    "### 实际动了哪些地方",
+    compactList(files, 5),
+    "",
+    "### 怎么确认没有跑偏",
+    compactList(verification, 4)
+  ].join("\n");
+}
+
+function renderCreationGuide(entries) {
+  const chronological = [...entries];
+  const latest = chronological.at(-1);
+  const latestVersion = sanitize(latest?.mcpVersion || "unknown");
+  const chapters = chronological.map(renderGuideChapter).join("\n\n");
+  return [
+    "# MCP 详细创建说明书",
+    "",
+    "这是一份给小白看的创建说明书。它不是冷冰冰的流水账，而是把这个 MCP 从 0 到现在怎么长出来，拆成一站一站的小积木。",
+    "",
+    `当前公开版：v${latestVersion}`,
+    "",
+    "## 先说人话：这个 MCP 是干什么的",
+    "",
+    "它是一个本地运行的微信小程序工程顾问。你可以把它理解成一个会拆任务的开发搭子：你说想做一个小程序，它帮你把页面、数据、云函数、权限、测试、上线检查都摆出来。",
+    "",
+    "它不负责偷偷部署，也不负责保存任何密钥。它的重点是让刚入门的人先看懂、再动手、最后能检查。",
+    "",
+    "## 创建思路",
+    "",
+    "- 第一层：先定方向。它不是模板库，而是工程顾问。",
+    "- 第二层：先能讲清楚。让小白知道页面、云函数、数据库、CloudBase 各自负责什么。",
+    "- 第三层：再能看项目。扫描 demo 小程序，画项目地图，解释文件角色。",
+    "- 第四层：补安全边界。客户素材、手机号、订单号、fileID、密钥都不能乱进日志。",
+    "- 第五层：加更新机制。内部日志保留细节，公开文档只同步脱敏后的说明。",
+    "",
+    "## 创建路线",
+    "",
+    chapters || "暂无创建记录。",
+    "",
+    "## 以后怎么更新这份说明书",
+    "",
+    "每次 MCP 有升级、优化、修 bug、补文档，先把内部优化日志追加好，然后运行：",
+    "",
+    "```bash",
+    "npm run changelog:sync",
+    "```",
+    "",
+    "这条命令会一起更新三样东西：",
+    "",
+    "- `CHANGELOG.md`：公开更新日志。",
+    "- `README.md`：最近更新摘要。",
+    "- `docs/mcp-creation-guide.md`：这份小白友好的详细创建说明书。",
+    "",
+    "## 安全提醒",
+    "",
+    "这份说明书来自内部日志，但生成时会脱敏。本机路径、手机号、密钥形态、真实云存储路径、本地业务名称都会被替换或泛化。公开仓库里不应该出现真实客户资料、token、AppSecret、订单号或真实 fileID。"
+  ].join("\n");
+}
+
 const entries = parseEntries();
 writeText(CHANGELOG, renderChangelog(entries));
+writeText(CREATION_GUIDE, renderCreationGuide(entries));
 updateReadme(entries);
 
 console.log(JSON.stringify({
   ok: true,
   entries: entries.length,
   changelog: path.relative(ROOT, CHANGELOG),
+  creationGuide: path.relative(ROOT, CREATION_GUIDE),
   readme: path.relative(ROOT, README)
 }, null, 2));

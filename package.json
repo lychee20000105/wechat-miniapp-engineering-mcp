@@ -1,6 +1,6 @@
 {
   "name": "wechat-miniapp-engineering-mcp",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": false,
   "type": "module",
   "description": "中文优先的本地微信小程序工程顾问 MCP，帮助小白从想法拆到上线。",

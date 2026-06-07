@@ -4,6 +4,38 @@
 
 同步时会脱敏本机路径、手机号、密钥形态、真实云存储路径和本地业务知识库描述；原始内部日志默认不提交到 GitHub。
 
+## 2026-06-07 - v0.5.2
+
+- 状态：success
+- 类型：creation-guide-sync-upgrade
+- 摘要：完成 v0.5.2 文档同步升级：新增小白友好版 MCP 详细创建说明书，并纳入 changelog:sync 自动更新流程。
+
+### 主要变更
+- 把“随时更新”落成脚本机制：npm run changelog:sync 同步 README 最近更新、CHANGELOG.md 和 docs/mcp-creation-guide.md。
+- 新增 docs/mcp-creation-guide.md，按创建路线拆成一站一站的小白说明，保留轻松语气但继续脱敏。
+- 版本从 0.5.1 升级到 0.5.2，本轮不新增 MCP tool/resource/prompt，只增强公开文档同步能力。
+- 继续不公开原始内部日志，公开说明书只从脱敏后的日志字段生成。
+- GitHub CLI gh 不存在，后续发布需要改用浏览器登录态、GitHub API 凭据或由用户安装 gh 后继续。
+
+### 文件与验证
+- scripts/sync-public-changelog.js：新增 docs/mcp-creation-guide.md 生成逻辑，并在输出结果里报告 creationGuide。
+- docs/mcp-creation-guide.md：新增小白友好版 MCP 详细创建说明书，按版本路线解释创建过程和维护方式。
+- README.md：补充说明 changelog:sync 会同步 README、CHANGELOG 和创建说明书，并链接 docs/mcp-creation-guide.md。
+- package.json：版本升级到 0.5.2。
+- src/server.js：SERVER_INFO 版本升级到 0.5.2。
+- npm run changelog:sync 通过，生成 docs/mcp-creation-guide.md。
+- node --check src/server.js 通过。
+- node --check scripts/smoke-test.js 通过。
+- node --check scripts/sync-public-changelog.js 通过。
+- npm run smoke:test 通过：toolCount 23、resourceCount 18、promptCount 3。
+
+### 安全边界
+- 本轮未上传、未创建 GitHub 仓库、未 git push、未部署、未改权限。
+- 本轮未安装依赖，未执行 npm install、curl、wget、brew 或远程脚本。
+- 本轮未读取真实客户项目、真实 CloudBase/Tencent 环境或目标工程外业务资料。
+- 原始内部日志仍在本地并被 .gitignore 排除；公开说明书只使用脱敏字段。
+- 发布到 GitHub 前仍需可用发布通道；当前 gh 命令不存在。
+
 ## 2026-06-07 - v0.5.1
 
 - 状态：success
@@ -134,7 +166,7 @@
 - 本轮未修改 <local-config> 客户端配置、全局 hooks 或外部系统。
 - 本轮未上传、未同步、未发布公网、未写入飞书或第三方账号。
 - 缓存只保存安全文本文件路径、hash、节点/边摘要和统计，不保存密钥、token、客户隐私原文或敏感文件内容。
-- 后续如需连接真实 CloudBase MCP、公开部署或修改账号权限，仍需 维护者 单独确认。
+- 后续如需连接真实 CloudBase MCP、公开部署或修改账号权限，仍需维护者 单独确认。
 
 ## 2026-06-07 - v0.3.0
 
@@ -171,7 +203,7 @@
 - 摘要：完成 v0.3.0 优化：内置追加式 MCP 优化日志，并嵌入 Understand-Anything 启发的小程序项目理解能力。
 
 ### 主要变更
-- 日志采用 JSONL + Markdown 双文件，既方便机器读取，也方便 维护者 直接审阅。
+- 日志采用 JSONL + Markdown 双文件，既方便机器读取，也方便维护者 直接审阅。
 - 新增日志 append/read/status 三个 MCP 工具和 full/latest/status 三个资源。
 - Understand-Anything 只作为方法论来源，嵌入轻量项目地图、全流程理解、文件角色解释、功能影响分析四个工具。
 - 继续保持 MCP 无依赖、本地 stdio、安全文本扫描和不保存密钥的边界。
@@ -196,7 +228,7 @@
 
 - 状态：unspecified
 - 类型：initial-summary
-- 摘要：整理 维护者 与 Codex 关于微信小程序工程 MCP 的完整优化脉络，并准备嵌入 Understand-Anything 启发的轻量项目理解能力。
+- 摘要：整理 维护者与 Codex 关于微信小程序工程 MCP 的完整优化脉络，并准备嵌入 Understand-Anything 启发的轻量项目理解能力。
 
 ### 主要变更
 - 将 MCP 定位为本地小程序工程顾问，而不是模板库：主线是帮助小白把微信原生小程序从想法拆到上线。
@@ -220,4 +252,4 @@
 - 跳过 auth.json、history.jsonl、project.private.config.json、.env、*.pem、*.key、id_rsa、credentials、token、secret、password、cookie、backup json。
 - 拒绝扫描 HOME、根目录、<local-config> 等高风险目录。
 - 不把官方 CloudBase MCP 打包进本 MCP，不保存腾讯云密钥。
-- 后续真实部署、上传、权限修改、外发、飞书写入仍需 维护者 另行确认。
+- 后续真实部署、上传、权限修改、外发、飞书写入仍需维护者 另行确认。

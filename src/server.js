@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
 const SERVER_INFO = {
   name: "wechat-miniapp-engineering-mcp",
-  version: "0.5.1"
+  version: "0.5.2"
 };
 const LOG_DIR = path.join(ROOT, "logs");
 const LOG_JSONL = path.join(LOG_DIR, "mcp-optimization-log.jsonl");
