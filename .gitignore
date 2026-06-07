@@ -29,4 +29,5 @@ outputs/*.md
 dist/
 build/
 coverage/
+*.tgz
 *.log

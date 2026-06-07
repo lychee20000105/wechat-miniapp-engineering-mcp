@@ -5,7 +5,7 @@
   "type": "module",
   "description": "中文优先的本地微信小程序工程顾问 MCP，帮助小白从想法拆到上线。",
   "bin": {
-    "wechat-miniapp-engineering-mcp": "./src/server.js"
+    "wechat-miniapp-engineering-mcp": "src/server.js"
   },
   "scripts": {
     "start": "node ./src/server.js",
